@@ -1,0 +1,24 @@
+body { 
+    background-color: #0f0f0f; 
+    color: #fff; 
+    /* Sticky Footer через Flexbox */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.navbar { background-color: #0f0f0f; border-bottom: 1px solid #303030; }
+.search-input { background: #121212; border: 1px solid #303030; color: #fff; }
+.search-input:focus { background: #121212; color: #fff; border-color: #fff; box-shadow: none; }
+
+/* Эффект зума при наведении */
+.thumb-wrap { position: relative; overflow: hidden; border-radius: 12px; }
+.thumb-wrap img { transition: transform 0.2s; width: 100%; height: 100%; object-fit: cover; }
+.thumb-wrap:hover img { transform: scale(1.05); }
+
+.duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.text-secondary-custom { color: #aaa; font-size: 0.85rem; }
+a { text-decoration: none; color: inherit; }
+
+/* Основной контент растягивается */
+main { flex: 1; }
