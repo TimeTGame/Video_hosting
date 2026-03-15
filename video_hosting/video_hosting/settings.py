@@ -74,6 +74,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation'
         '.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 8,
+        },
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
@@ -96,14 +99,13 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-
 STATICFILES_DIRS = [
     str(BASE_DIR / 'my_static'),
 ]
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'my_static' / 'media'
 
-MEDIA_URL = '/media/'
+AUTH_USER_MODEL = 'users.CustomUser'
