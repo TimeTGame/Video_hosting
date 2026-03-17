@@ -1,0 +1,32 @@
+<div class="address-box">
+    <form hx-post="{% url 'users:update_account_details' %}"
+            hx-target="#profile-section"
+            hx-swap="innerHTML">
+        {% csrf_token %}
+        {% for field in form %}
+            {% if field.name not in 'email,marketing_consent1,marketing_consent2' %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        <div class="form-group">
+            <label for="{{ form.marketing_consent1.id_for_label }}" class="me-3">Consent to spam </label>
+            {{ form.marketing_consent1 }}
+            {% if form.marketing_consent1.errors %}
+                <div class="error">{{ form.errors }}</div>
+            {% endif %}
+        </div>
+        <div class="button-container mt-2">
+            <button type="submit">Update</button>
+            <button hx-get="{% url 'users:account_details' %}"
+                    hx-target="#profile-section"
+                    hx-swap="innerHTML"
+                    type="button">Cancel</button>
+        </div>
+    </form>
+</div>

@@ -8,25 +8,27 @@
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-icons.css' %}">
   <link rel="stylesheet" href="{% static 'bootstrap/css/custom.css' %}">
-  <link rel="icon" type="image/png" href="{% static 'media/img/fav/favicon-96x96.png' %}" sizes="96x96">
-  <link rel="icon" type="image/svg" href="{% static 'media/img/fav/favicon.svg' %}">
-  <link rel="icon" type="image" href="{% static 'media/img/fav/favicon.ico' %}">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="{% static 'media/img/fav/apple-touch-icon.png' %}">
-  <link rel="manifest" href="{% static 'media/img/fav/site.webmanifest' %}">
+  <link rel="icon" type="image/png" href="{% static 'media/images/fav/favicon-96x96.png' %}" sizes="96x96">
+  <link rel="icon" type="image/svg" href="{% static 'media/images/fav/favicon.svg' %}">
+  <link rel="icon" type="image" href="{% static 'media/images/fav/favicon.ico' %}">
+  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="{% static 'media/images/fav/apple-touch-icon.png' %}">
+  <link rel="manifest" href="{% static 'media/images/fav/site.webmanifest' %}">
+  <script src="{% static "htmx/js/htmx.min.js" %}"></script>
   <title>
-    {% block title %}Заголовок{% endblock %}
+    {% block title %}Title{% endblock %}
   </title>
 </head>
 
-<body>
+<body style="padding-top: 100px;">
   {% include "includes/header.html" %}
 
   <main class="flex-grow-1">
-    {% block content %}Контента нет, но вы держитесь :){% endblock %}
+    {% block content %}No content{% endblock %}
   </main>
 
   {% include "includes/footer.html" %}
 
+  <script src="{% static 'bootstrap/js/custom.js' %}"></script>
   <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 

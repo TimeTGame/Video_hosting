@@ -1,8 +1,10 @@
+__all__ = []
+
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import get_user_model, authenticate
-from django.utils.html import strip_tags
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.core.validators import RegexValidator
+from django.utils.html import strip_tags
 
 
 User = get_user_model()
@@ -22,7 +24,7 @@ class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         required=False,
         max_length=50,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your nickname',
@@ -32,7 +34,7 @@ class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your first name',
@@ -42,7 +44,7 @@ class CustomUserCreationForm(UserCreationForm):
     last_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your last name',
@@ -51,7 +53,7 @@ class CustomUserCreationForm(UserCreationForm):
     )
     password1 = forms.CharField(
         required=True,
-        widget=forms.EmailInput(
+        widget=forms.PasswordInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your password',
@@ -60,7 +62,7 @@ class CustomUserCreationForm(UserCreationForm):
     )
     password2 = forms.CharField(
         required=True,
-        widget=forms.EmailInput(
+        widget=forms.PasswordInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Confirm your password',
@@ -69,16 +71,16 @@ class CustomUserCreationForm(UserCreationForm):
     )
     marketing_consent1 = forms.BooleanField(
         required=False,
-        label='Recive spam',
-        widget=forms.EmailInput(
-            attrs={'class': 'input-register form-control'},
+        label='Receive spam',
+        widget=forms.CheckboxInput(
+            attrs={'class': 'input-register'},
         ),
     )
     marketing_consent2 = forms.BooleanField(
         required=False,
         label='Sell soul here',
-        widget=forms.EmailInput(
-            attrs={'class': 'input-register form-control'},
+        widget=forms.CheckboxInput(
+            attrs={'class': 'input-register'},
         ),
     )
 
@@ -128,7 +130,7 @@ class CustomUserLoginForm(AuthenticationForm):
     )
     password = forms.CharField(
         label='Password',
-        widget=forms.TextInput(
+        widget=forms.PasswordInput(
             attrs={
                 'autofocus': True,
                 'class': 'input-register form-control',
@@ -142,14 +144,19 @@ class CustomUserLoginForm(AuthenticationForm):
         password = self.cleaned_data.get('password')
 
         if email and password:
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                raise forms.ValidationError('Invalid email or password.')
+
+            if not user.is_active:
+                raise forms.ValidationError('This account is inactive.')
+
             self.user_cache = authenticate(
                 self.request, email=email, password=password,
             )
-
             if self.user_cache is None:
                 raise forms.ValidationError('Invalid email or password.')
-            elif not self.user_cache.is_active:
-                raise forms.ValidationError('This account is inactive.')
 
             return self.cleaned_data
 
@@ -173,18 +180,18 @@ class CustomUserUpdateForm(forms.ModelForm):
                 'Enther a valid phone number.',
             ),
         ],
-        widget=forms.TextInput(
+        widget=forms.NumberInput(
             attrs={
                 'autofocus': True,
                 'class': 'input-register form-control',
-                'placeholder': 'Your Password',
+                'placeholder': 'Your phone number',
             },
         ),
     )
     first_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your first name',
@@ -194,7 +201,7 @@ class CustomUserUpdateForm(forms.ModelForm):
     last_name = forms.CharField(
         required=True,
         max_length=50,
-        widget=forms.EmailInput(
+        widget=forms.TextInput(
             attrs={
                 'class': 'input-register form-control',
                 'placeholder': 'Your last name',
@@ -238,8 +245,8 @@ class CustomUserUpdateForm(forms.ModelForm):
                     'placeholder': 'Your username',
                 },
             ),
-            'marketing_consent1': forms.BooleanField(
-                attrs={'class': 'input-register form-control'},
+            'marketing_consent1': forms.CheckboxInput(
+                attrs={'class': 'input-register'},
             ),
         }
 
@@ -262,14 +269,15 @@ class CustomUserUpdateForm(forms.ModelForm):
         if not cleaned_data.get('email'):
             cleaned_data['email'] = self.instance.email
 
-            for field in [
-                'first_name',
-                'last_name',
-                'username',
-                'phone',
-                'marketing_consent1',
-            ]:
-                if cleaned_data.get(field):
-                    cleaned_data[field] = strip_tags(cleaned_data[field])
+        for field in [
+            'first_name',
+            'last_name',
+            'username',
+            'phone',
+            'marketing_consent1',
+            'marketing_consent2',
+        ]:
+            if cleaned_data.get(field):
+                cleaned_data[field] = strip_tags(cleaned_data[field])
 
-                return cleaned_data
+        return cleaned_data

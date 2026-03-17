@@ -1,12 +1,12 @@
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
-from django.conf import settings
-from django.conf.urls.static import static
-
 
 urlpatterns = [
-    path('', include('homepage.urls')),
+    path('', include('homepage.urls', namespace='homepage')),
+    path('users/', include('users.urls', namespace='users')),
     path('admin/', admin.site.urls),
 ]
 if settings.DEBUG:

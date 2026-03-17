@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="px-5 mb-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex align-items-center gap-3">
+                <img src="{% static 'media/images/logo.jpg' %}" class="rounded-circle" width="80" height="80" alt="Avatar">
+                <div>
+                    <h2 class="fw-bold mb-1">{{ request.user.username }}</h2>
+                    <p class="text-secondary mb-0">{{ request.user.email }}</p>
+                </div>
+                <button class="btn btn-outline-light ms-auto">Details</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="nav nav-tabs profile-tabs mb-4 px-5" id="profileTabs">
+    <li class="nav-item">
+        <a class="nav-link active" data-bs-toggle="pill" href="#myVideos">My videos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#watchLater">Watch later</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#history">History</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#liked">Liked</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" data-bs-toggle="pill" href="#settings" 
+            hx-get="{% url 'users:account_details' %}"
+            hx-target="#profile-section"
+            hx-swap="innerHTML">Settings</a>
+    </li>
+</ul>
+
+<div class="tab-content px-5">
+    <div class="tab-pane fade show active" id="myVideos">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+            <div class="col">
+                <div class="thumb-wrap ratio ratio-16x9 mb-2">
+                    <img src="https://picsum.photos/seed/vid1/640/360" alt="Thumb">
+                    <span class="duration">12:45</span>
+                </div>
+                <h6 class="fw-bold mb-1">Как выучить Bootstrap</h6>
+                <div class="text-secondary-custom">150 k. views</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="watchLater">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+            <div class="col">
+                <div class="thumb-wrap ratio ratio-16x9 mb-2">
+                    <img src="https://picsum.photos/seed/vid4/640/360" alt="Thumb">
+                    <span class="duration">45:00</span>
+                </div>
+                <h6 class="fw-bold mb-1">Длинный подкаст</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="history">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+            <div class="col">
+                <div class="thumb-wrap ratio ratio-16x9 mb-2">
+                    <img src="https://picsum.photos/seed/vid6/640/360" alt="Thumb">
+                    <span class="duration">10:05</span>
+                </div>
+                <h6 class="fw-bold mb-1">Тест-драйв Tesla</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="liked">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
+            <div class="col">
+                <div class="thumb-wrap ratio ratio-16x9 mb-2">
+                    <img src="https://picsum.photos/seed/vid8/640/360" alt="Thumb">
+                    <span class="duration">5:30</span>
+                </div>
+                <h6 class="fw-bold mb-1">Лучшая музыка 2024</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-pane fade" id="settings">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-6 col-lg-4">
+
+                <h2>Hi, {{ request.user.first_name|upper }} {{ request.user.last_name|upper }}</h2>
+                <div id="profile-section"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

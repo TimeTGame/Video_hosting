@@ -1,0 +1,13 @@
+<div class="address-box">
+    <h4 class="mb-3">Account Information:</h4>
+    <p><b>Name: </b>{{ user.first_name }} {{ user.last_name }} </p>
+    <p><b>Email: </b>{{ user.email }}</p>
+    <p><b>Username: </b>{{ user.username }}</p>
+    {% if user.phone %}
+        <p><b>Phone number: </b>{{ user.phone }}</p>
+    {% endif %}
+    <p><b>Consent to spam: </b>{{ user.marketing_consent1 }}</p>
+    <button hx-get="{% url 'users:edit_account_details' %}"
+            hx-target="#profile-section"
+            hx-swap="innerHTML">Edit</button>
+</div>

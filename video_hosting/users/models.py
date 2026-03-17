@@ -52,11 +52,7 @@ class CustomUser(AbstractUser):
     )
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    country_code = models.IntegerField(
-        validators=[MaxValueValidator(3)],
-    )
     phone = models.IntegerField(
-        validators=[MaxValueValidator(15)],
         blank=True,
         null=True,
     )
@@ -78,8 +74,6 @@ class CustomUser(AbstractUser):
             'first_name',
             'last_name',
             'username',
-            'phone',
-            'marketing_consent1',
         ]:
             value = getattr(self, field)
             if value:
