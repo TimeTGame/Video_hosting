@@ -22,8 +22,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users.apps.UsersConfig',
+    'actions.apps.ActionsConfig',
     'homepage.apps.HomepageConfig',
+    'users.apps.UsersConfig',
+    'videos.apps.VideosConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -108,5 +111,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'my_static' / 'media'
+
+USER_MEDIA_URL = MEDIA_ROOT / 'user_files'
+"""The path where user media will be saved"""
 
 AUTH_USER_MODEL = 'users.CustomUser'

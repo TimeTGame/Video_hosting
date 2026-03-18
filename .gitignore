@@ -209,3 +209,5 @@ __marimo__/
 
 # My
 .github-ci.yml
+fixtures/
+user_files/

@@ -1,6 +1,7 @@
 __all__ = []
 
 from actions.models import LikeDislike
+from core.functions import user_thumbnails_path, user_videos_path
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from users.models import CustomUser
@@ -22,8 +23,13 @@ class Videos(models.Model):
         db_index=True,
     )
     title = models.CharField(max_length=255)
-    description = models.TextChoices(blank=True)
-    thumbnail = models.URLField(max_length=500, blank=True, null=True)
+    description = models.TextField(blank=True)
+    thumbnail = models.ImageField(
+        max_length=500,
+        upload_to=user_thumbnails_path,
+        blank=True,
+        null=True,
+    )
     duration_seconds = models.PositiveBigIntegerField()
     views_count = models.PositiveBigIntegerField(default=0)
     votes = GenericRelation(LikeDislike, related_query_name='videos')
@@ -34,6 +40,9 @@ class Videos(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        verbose_name = 'Video'
+        verbose_name_plural = 'Videos'
+
         db_table = 'videos'
         ordering = ['-created_at']
         indexes = [
@@ -46,20 +55,28 @@ class Videos(models.Model):
         return f'{self.title} ({self.user.username})'
 
 
-class VideoFiles(models.Models):
+class VideoFiles(models.Model):
     FORMAT_CHOICES = (
         ('mp4', 'MP4'),
         ('hls', 'HLS'),
         ('dash', 'DASH'),
     )
 
+    video = models.ForeignKey(
+        Videos,
+        on_delete=models.CASCADE,
+        related_name='files',
+    )
     resolution = models.CharField(max_length=10)
     video_format = models.CharField(
         max_length=10, choices=FORMAT_CHOICES, default='mp4',
     )
-    storage_url = models.URLField(max_length=500)
+    storage_url = models.FileField(max_length=500, upload_to=user_videos_path)
 
     class Meta:
+        verbose_name = 'Video file'
+        verbose_name_plural = 'Video files'
+
         db_table = 'video_files'
         indexes = [
             models.Index(fields=['video_id', 'resolution']),

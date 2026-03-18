@@ -35,13 +35,16 @@ class LikeDislike(models.Model):
     )
 
     vote = models.SmallIntegerField(choices=VOTES)
-    user = models.ForeignKey(CustomUser)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.DO_NOTHING)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey()
 
     objects = LikeDislikeManager()
 
     class Meta:
+        verbose_name = 'Like / Dislike'
+        verbose_name_plural = 'Likes / Dislikes'
+
         unique_together = ('user', 'content_type', 'object_id')
