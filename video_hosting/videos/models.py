@@ -1,5 +1,7 @@
 __all__ = []
 
+from actions.models import LikeDislike
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from users.models import CustomUser
 
@@ -24,8 +26,7 @@ class Videos(models.Model):
     thumbnail = models.URLField(max_length=500, blank=True, null=True)
     duration_seconds = models.PositiveBigIntegerField()
     views_count = models.PositiveBigIntegerField(default=0)
-    likes_count = models.PositiveIntegerField(default=0)
-    dislikes_count = models.PositiveIntegerField(default=0)
+    votes = GenericRelation(LikeDislike, related_query_name='videos')
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='processing',
     )
