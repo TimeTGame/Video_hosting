@@ -42,3 +42,6 @@ class LikeDislike(models.Model):
     content_object = GenericForeignKey()
 
     objects = LikeDislikeManager()
+
+    class Meta:
+        unique_together = ('user', 'content_type', 'object_id')
