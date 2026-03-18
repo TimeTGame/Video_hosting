@@ -1,0 +1,7 @@
+__all__ = []
+
+from django.apps import AppConfig
+
+
+class VideosConfig(AppConfig):
+    name = 'videos'
