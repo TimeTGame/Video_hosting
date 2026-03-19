@@ -211,3 +211,4 @@ __marimo__/
 .github-ci.yml
 fixtures/
 user_files/
+cache/
