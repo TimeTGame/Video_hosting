@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load humanize %}
+
+{% block title %}{{ video.title }}{% endblock %}
+
+{% block content %}
+<div class="row g-4 d-flex justify-content-end">
+    <div class="col-12 col-lg-8">
+        <div class="video-player ratio ratio-16x9 mb-3">
+            <video src="{{ video_file.storage_url.url }}" width="{{ video.get_width }}" height="{{ video.resolution }}" controls>
+                Your browser does not support embedded videos.
+            </video>
+        </div>
+
+        <h1 class="fs-4 fw-bold mb-2">{{ video.title }}</h1>
+
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+            <div class="d-flex align-items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name=Code&background=0D8ABC&color=fff" class="avatar" alt="Avatar">
+                <div>
+                    <h6 class="fw-bold mb-0">{{ video.user.username }}</h6>
+                    <div class="text-secondary-custom">125 k subscribers</div>
+                </div>
+                <button class="btn btn-light rounded-pill px-4 fw-bold ms-2">Subscribe</button>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <div class="d-flex">
+                    <button class="btn btn-custom rounded-start-pill px-3">
+                        <i class="bi bi-hand-thumbs-up me-1"></i> {{ video.get_likes }}
+                    </button>
+                    <button class="btn btn-custom rounded-end-pill px-3 border-start border-secondary">
+                        <i class="bi bi-hand-thumbs-down"></i> {{ video.get_dislikes }}
+                    </button>
+                </div>
+                <button class="btn btn-custom rounded-pill px-3">
+                    <i class="bi bi-share me-1"></i> Share
+                </button>
+                <button class="btn btn-custom rounded-pill px-3">
+                    <i class="bi bi-download me-1"></i> Download
+                </button>
+                <button class="btn btn-custom rounded-circle">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-dark rounded-3 p-3 mb-4">
+            <div class="d-flex gap-2 mb-2">
+                <span class="text-secondary-custom fw-bold">{{ video.views_count }} views</span>
+                <span class="text-secondary-custom">•</span>
+                <span class="text-secondary-custom fw-bold">{{ video.created_at|naturaltime }}</span>
+            </div>
+            <p class="mb-0" style="line-height: 1.5;">
+                {{ video.description }}
+            </p>
+            <button class="btn btn-link text-secondary p-0 mt-2">More</button>
+        </div>
+
+        <div class="mb-4">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <h5 class="fw-bold mb-0">248 Comments</h5>
+                <div class="dropdown">
+                    <button class="btn btn-custom btn-sm rounded-pill" data-bs-toggle="dropdown">
+                        <i class="bi bi-sort-down me-1"></i> Sort
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="#">Popular first</a></li>
+                        <li><a class="dropdown-item" href="#">New first</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-4">
+                <img src="https://ui-avatars.com/api/?name=User&background=random" class="comment-avatar" alt="Avatar">
+                <div class="flex-grow-1">
+                    <input type="text" class="form-control form-control-dark bg-transparent border-0 border-bottom rounded-0" placeholder="Введите комментарий...">
+                    <div class="d-flex justify-content-end gap-2 mt-2">
+                        <button class="btn btn-custom btn-sm rounded-pill">Cancel</button>
+                        <button class="btn btn-light btn-sm rounded-pill px-3">Comment</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 mb-4">
+                <img src="https://ui-avatars.com/api/?name=Maria&background=blue&color=fff" class="comment-avatar" alt="Avatar">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-1">
+                        <span class="fw-bold small">Maria Web</span>
+                        <span class="text-secondary-custom small">5 hours later</span>
+                    </div>
+                    <p class="mb-2">Idk test comment</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-link text-secondary p-0 small">
+                            <i class="bi bi-hand-thumbs-up me-1"></i> 128
+                        </button>
+                        <button class="btn btn-link text-secondary p-0 small">
+                            <i class="bi bi-hand-thumbs-down"></i>
+                        </button>
+                        <button class="btn btn-link text-secondary p-0 small fw-bold">Answer</button>
+                    </div>
+
+                    <div class="d-flex gap-3 mt-3">
+                        <img src="https://ui-avatars.com/api/?name=Code&background=0D8ABC&color=fff" class="comment-avatar" alt="Avatar">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="fw-bold small">Code Master</span>
+                                <span class="text-secondary-custom small">3 hours later</span>
+                                <span class="badge bg-secondary small">Author</span>
+                            </div>
+                            <p class="mb-2">Also idk comment</p>
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="btn btn-link text-secondary p-0 small">
+                                    <i class="bi bi-hand-thumbs-up me-1"></i> 32
+                                </button>
+                                <button class="btn btn-link text-secondary p-0 small">
+                                    <i class="bi bi-hand-thumbs-down"></i>
+                                </button>
+                                <button class="btn btn-link text-secondary p-0 small fw-bold">Answer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4" style="max-width: 500px">
+        <div>
+            <h5 class="fw-bold mb-3">Related videos</h5>
+            {% for mini_video in mini_videos %}
+                {% include "videos/includes/mini_video_card.html" with video=mini_video %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

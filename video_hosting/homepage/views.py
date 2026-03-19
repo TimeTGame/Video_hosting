@@ -1,12 +1,11 @@
 __all__ = []
 
-from http import HTTPStatus
-
-from django.http import HttpResponse
 from django.shortcuts import render
+from videos.models import Videos
 
 
 def index_render(request):
     template = 'homepage/index.html'
+    videos = Videos.objects.all()
 
-    return render(request, template)
+    return render(request, template, {'videos': videos})

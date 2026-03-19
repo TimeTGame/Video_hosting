@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'videos.apps.VideosConfig',
     'django_cleanup.apps.CleanupConfig',
+    'sorl.thumbnail',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

@@ -21,8 +21,7 @@ class LikeDislikeManager(models.Manager):
 
     def videos(self):
         return (self.get_queryset()
-                .filter(content_type__model='videos')
-                .order_by('-videos__created_at'))
+                .filter(content_type__model='videos'))
 
 
 class LikeDislike(models.Model):

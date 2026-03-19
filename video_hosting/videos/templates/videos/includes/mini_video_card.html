@@ -1,0 +1,21 @@
+{% load static %}
+{% load thumbnail %}
+{% load humanize %}
+
+<a href="{% url 'videos:video_detail' video.pk %}">
+  <div class="d-flex gap-2 mb-3">
+    <div class="thumb-wrap ratio ratio-4x3 mb-2 mini-thumb">
+      {% thumbnail video.thumbnail "300x100" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ im.title }}">
+      {% endthumbnail %}
+      <div class="">
+        <span class="duration">{{ video.convert_duration }}</span>
+      </div>
+    </div>
+    <div class="mini_video-info">
+      <h6 class="fw-bold small mb-1" style="word-break: break-word; hyphens: auto">{{ video.title|slice:":50" }}{% if video.title|length > 50 %}...{% endif %}</h6>
+      <div class="text-secondary-custom small">{{ video.user.username }}</div>
+      <div class="text-secondary-custom small">{{ video.views_count }} views • {{ video.created_at|naturaltime }}</div>
+    </div>
+  </div>
+</a>

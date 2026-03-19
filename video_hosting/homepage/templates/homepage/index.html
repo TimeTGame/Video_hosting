@@ -4,10 +4,8 @@
 {% block title %}Главная{% endblock %}
 
 {% block content %}
-  <!-- Основной контент (YouTube Style: Сетка) -->
   <div class="container-fluid px-4">
-      
-    <!-- Категории (Chips) -->
+
     <div class="d-flex gap-2 overflow-auto pb-3 mb-3" style="white-space: nowrap;">
         <button class="btn btn-light rounded-pill px-3 fw-bold">Все</button>
         <button class="btn btn-dark rounded-pill px-3 border border-secondary">Музыка</button>
@@ -18,25 +16,11 @@
         <button class="btn btn-dark rounded-pill px-3 border border-secondary">Кулинария</button>
     </div>
 
-    <!-- Сетка видео -->
-    <!-- row-cols-1 (моб) -> row-cols-sm-2 (планшет) -> row-cols-md-3 (ноут) -> row-cols-xl-4 (ПК) -->
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-4">
-      
-      <!-- Карточка 1 -->
-      <div class="col">
-        <div class="thumb-wrap ratio ratio-16x9 mb-2">
-          <img src="https://picsum.photos/seed/1/640/360" alt="Thumb">
-          <span class="duration">12:45</span>
-        </div>
-        <div class="d-flex">
-          <img src="https://ui-avatars.com/api/?name=A&background=red&color=fff" class="avatar me-2" alt="Avatar">
-          <div>
-            <h6 class="fw-bold mb-1 text-truncate" style="max-width: 250px;">Как выучить Bootstrap за 10 минут</h6>
-            <div class="text-secondary-custom">Code Master</div>
-            <div class="text-secondary-custom">150 тыс. просмотров • 2 часа назад</div>
-          </div>
-        </div>
-      </div>
+
+      {% for video in videos %}
+        {% include "videos/includes/video_card.html" with item=video %}
+      {% endfor %}
     </div>
   </div>
 {% endblock %}

@@ -1,0 +1,24 @@
+{% load static %}
+{% load thumbnail %}
+{% load humanize %}
+
+<div class="col">
+  <a href="{% url 'videos:video_detail' item.pk %}">
+    <div class="thumb-wrap ratio ratio-16x9 mb-2">
+      {% thumbnail item.thumbnail "300x300" as im %}
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ im.title }}">
+      {% endthumbnail %}
+      <div>
+        <span class="duration">{{ item.convert_duration }}</span>
+      </div>
+    </div>
+    <div class="d-flex">
+      <img src="https://ui-avatars.com/api/?name=A&background=red&color=fff" class="avatar me-2" alt="Avatar">
+      <div>
+        <h6 class="fw-bold mb-1 text-truncate" style="max-width: 250px;">{{ item.title }}</h6>
+        <div class="text-secondary-custom">{{ item.user.username }}</div>
+        <div class="text-secondary-custom">{{ item.views_count }} views • {{ item.created_at|naturaltime }}</div>
+      </div>
+    </div>
+  </a>
+</div>
