@@ -4,12 +4,43 @@
 {% load humanize %}
 
 {% block title %}{{ video.title }}{% endblock %}
+{% block style %}
+.description-text {
+    max-height: 80px; 
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+    position: relative;
+}
+
+.description-text.expanded {
+    max-height: 1000px;
+}
+
+.toggle-desc-btn {
+    background: none;
+    border: none;
+    color: #065fd4;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 5px;
+    font-size: 14px;
+    display: none;
+}
+
+.toggle-desc-btn:hover {
+    text-decoration: underline;
+}
+{% endblock %}
 
 {% block content %}
+<style>
+        
+    </style>
 <div class="row g-4 d-flex justify-content-end">
     <div class="col-12 col-lg-8">
         <div class="video-player ratio ratio-16x9 mb-3">
-            <video src="{{ video_file.storage_url.url }}" width="{{ video.get_width }}" height="{{ video.resolution }}" controls>
+            <video src="{{ video_file.storage_url.url }}" controls>
                 Your browser does not support embedded videos.
             </video>
         </div>
@@ -53,10 +84,12 @@
                 <span class="text-secondary-custom">•</span>
                 <span class="text-secondary-custom fw-bold">{{ video.created_at|naturaltime }}</span>
             </div>
-            <p class="mb-0" style="line-height: 1.5;">
-                {{ video.description }}
-            </p>
-            <button class="btn btn-link text-secondary p-0 mt-2">More</button>
+            <div class="description-container">
+                <div class="description-text" id="descText">
+                    {{ video.description }}
+                </div> 
+                <button class="toggle-desc-btn" id="toggleDescBtn">More</button>
+            </div>
         </div>
 
         <div class="mb-4">
@@ -136,6 +169,23 @@
             {% endfor %}
         </div>
     </div>
-
 </div>
+<script>
+    const textBlock = document.getElementById('descText');
+    const btn = document.getElementById('toggleDescBtn');
+
+    if (textBlock.scrollHeight > textBlock.clientHeight) {
+        btn.style.display = 'block';
+    }
+
+    btn.addEventListener('click', () => {
+        textBlock.classList.toggle('expanded');
+
+        if (textBlock.classList.contains('expanded')) {
+            btn.textContent = 'Less';
+        } else {
+            btn.textContent = 'More';
+        }
+    });
+</script>
 {% endblock %}
