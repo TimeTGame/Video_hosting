@@ -63,10 +63,28 @@ class Videos(models.Model):
         return LikeDislike.objects.videos().filter(object_id=self.pk)
 
     def get_likes(self):
-        return self.get_all_reactions().filter(vote__gt=0).count()
+        likes = self.get_all_reactions().filter(vote__gt=0).count()
+
+        if likes < 1000:
+            return f'{likes}'
+        elif likes < 1000000:
+            if likes[-3:-4] == 0:
+                return f'{likes[:-3]} K'
+            return f'{likes[:-3]},{likes[-3:-4]} K'
+        else:
+            return f'{likes[:-6]} M'
 
     def get_dislikes(self):
-        return self.get_all_reactions().filter(vote__lt=0).count()
+        dislikes = self.get_all_reactions().filter(vote__lt=0).count()
+
+        if dislikes < 1000:
+            return f'{dislikes}'
+        elif dislikes < 1000000:
+            if dislikes[-3:-4] == 0:
+                return f'{dislikes[:-3]} K'
+            return f'{dislikes[:-3]},{dislikes[-3:-4]} K'
+        else:
+            return f'{dislikes[:-6]} M'
 
     def __str__(self):
         return f'{self.title} ({self.user.username})'

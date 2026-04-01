@@ -2,6 +2,7 @@
 {% load static %}
 {% load thumbnail %}
 {% load humanize %}
+{% load vote_tags %}
 
 {% block title %}{{ video.title }}{% endblock %}
 {% block style %}
@@ -59,12 +60,28 @@
 
             <div class="d-flex align-items-center gap-2">
                 <div class="d-flex">
-                    <button class="btn btn-custom rounded-start-pill px-3">
-                        <i class="bi bi-hand-thumbs-up me-1"></i> {{ video.get_likes }}
-                    </button>
-                    <button class="btn btn-custom rounded-end-pill px-3 border-start border-secondary">
-                        <i class="bi bi-hand-thumbs-down"></i> {{ video.get_dislikes }}
-                    </button>
+                    <form id="videoLike">
+                        {% csrf_token %}
+                        <button class="btn btn-custom rounded-start-pill px-3">
+                            {% if user|has_liked:video %}
+                                <i class="bi bi-hand-thumbs-up-fill me-1"></i>
+                            {% else %}
+                                <i class="bi bi-hand-thumbs-up me-1"></i>
+                            {% endif %}
+                            <span class="like-counter">{{ video.get_likes }}</span>
+                        </button>
+                    </form>
+                    <form id="videoDislike">
+                        {% csrf_token %}
+                        <button class="btn btn-custom rounded-end-pill px-3 border-start border-secondary">
+                            {% if user|has_disliked:video %}
+                                <i class="bi bi-hand-thumbs-down-fill"></i>
+                            {% else %}
+                                <i class="bi bi-hand-thumbs-down"></i>
+                            {% endif %}
+                            <span class="dislike-counter">{{ video.get_dislikes }}</span>
+                        </button>
+                    </form>
                 </div>
                 <button class="btn btn-custom rounded-pill px-3">
                     <i class="bi bi-share me-1"></i> Share
@@ -187,5 +204,100 @@
             btn.textContent = 'More';
         }
     });
+
+
+    const videoLike = document.getElementById('videoLike');
+    const videoLikeIcon = videoLike.querySelector('.btn').querySelector('.bi');
+    const videoLikeCounter = videoLike.querySelector('.btn').querySelector('.like-counter');
+
+    const videoDislike = document.getElementById('videoDislike');
+    const videoDislikeIcon = videoDislike.querySelector('.btn').querySelector('.bi');
+    const videoDislikeCounter = videoDislike.querySelector('.btn').querySelector('.dislike-counter');
+
+    videoLike.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('{% url "actions:video_like" pk=video.pk %}', {
+            method: 'POST',
+            body: formData
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            let countNum = parseInt(videoLikeCounter.innerText, 10)
+
+            if (data.result === true) {
+                videoLikeIcon.classList.remove(`bi-hand-thumbs-up`)
+                videoLikeIcon.classList.add(`bi-hand-thumbs-up-fill`)
+
+                videoLikeCounter.innerText = countNum + 1;
+
+                if (videoDislikeIcon.classList.contains(`bi-hand-thumbs-down-fill`)) {
+                    videoDislikeIcon.classList.remove(`bi-hand-thumbs-down-fill`)
+                    videoDislikeIcon.classList.add(`bi-hand-thumbs-down`)
+
+                    videoDislikeCounter.innerText = parseInt(videoDislikeCounter.innerText, 10) - 1
+                }
+            } else {
+                videoLikeIcon.classList.remove(`bi-hand-thumbs-up-fill`)
+                videoLikeIcon.classList.add(`bi-hand-thumbs-up`)
+
+                videoLikeCounter.innerText = countNum - 1;
+            }
+
+        } catch (error) {
+            console.error('Error during fetch operation:', error);
+        }
+    })
+
+    videoDislike.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+
+        try {
+            const response = await fetch('{% url "actions:video_dislike" pk=video.pk %}', {
+            method: 'POST',
+            body: formData
+            })
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            let countNum = parseInt(videoDislikeCounter.innerText, 10)
+
+            if (data.result === true) {
+                videoDislikeIcon.classList.remove(`bi-hand-thumbs-down`)
+                videoDislikeIcon.classList.add(`bi-hand-thumbs-down-fill`)
+
+                videoDislikeCounter.innerText = countNum + 1;
+
+                if (videoLikeIcon.classList.contains(`bi-hand-thumbs-up-fill`)) {
+                    videoLikeIcon.classList.remove(`bi-hand-thumbs-up-fill`)
+                    videoLikeIcon.classList.add(`bi-hand-thumbs-up`)
+
+                    videoLikeCounter.innerText = parseInt(videoLikeCounter.innerText, 10) - 1
+                }
+            } else {
+                videoDislikeIcon.classList.remove(`bi-hand-thumbs-down-fill`)
+                videoDislikeIcon.classList.add(`bi-hand-thumbs-down`)
+
+                videoDislikeCounter.innerText = countNum - 1;
+            }
+
+        } catch (error) {
+            console.error('Error during fetch operation:', error);
+        }
+    })
 </script>
 {% endblock %}
