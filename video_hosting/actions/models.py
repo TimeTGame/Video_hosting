@@ -1,6 +1,8 @@
 __all__ = []
 
-from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import (
+    GenericForeignKey, GenericRelation,
+)
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models import Sum
@@ -47,3 +49,38 @@ class LikeDislike(models.Model):
         verbose_name_plural = 'Likes / Dislikes'
 
         unique_together = ('user', 'content_type', 'object_id')
+
+
+class Comment(models.Model):
+    video = models.ForeignKey(
+        'videos.Videos',
+        on_delete=models.CASCADE,
+        related_name='comments',
+        db_index=True,
+    )
+    user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name='comments',
+    )
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.CASCADE,
+        related_name='replies',
+        null=True,
+        blank=True,
+        db_index=True,
+    )
+    content = models.TextField()
+    votes = GenericRelation(LikeDislike, related_query_name='videos')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'comments'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['video_id', '-created_at']),
+            models.Index(fields=['parent_id']),
+        ]
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.video.title}'
