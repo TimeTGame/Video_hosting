@@ -83,11 +83,8 @@
                         </button>
                     </form>
                 </div>
-                <button class="btn btn-custom rounded-pill px-3">
+                <button class="btn btn-custom rounded-pill px-3" id='copy-button'>
                     <i class="bi bi-share me-1"></i> Share
-                </button>
-                <button class="btn btn-custom rounded-pill px-3">
-                    <i class="bi bi-download me-1"></i> Download
                 </button>
                 <button class="btn btn-custom rounded-circle">
                     <i class="bi bi-three-dots"></i>
@@ -188,6 +185,15 @@
     </div>
 </div>
 <script>
+    document.getElementById('copy-button').addEventListener('click', function() {
+    navigator.clipboard.writeText('{% url "videos:video_detail" pk=video.pk %}').then(function() {
+        alert('Текст скопирован!');
+    }).catch(function(err) {
+        console.error('Ошибка копирования: ', err);
+    });
+});
+
+
     const textBlock = document.getElementById('descText');
     const btn = document.getElementById('toggleDescBtn');
 
