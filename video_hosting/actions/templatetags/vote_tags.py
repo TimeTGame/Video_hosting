@@ -7,19 +7,21 @@ register = template.Library()
 
 @register.filter(name='has_liked')
 def has_liked(user, obj) -> bool:
-    user_vote = obj.votes.filter(user=user)
+    if user.is_authenticated:
+        user_vote = obj.votes.filter(user=user)
 
-    if user_vote.exists() and user_vote[0].vote == 1:
-        return True
-    else:
-        return False
+        if user_vote.exists() and user_vote[0].vote == 1:
+            return True
+
+    return False
 
 
 @register.filter(name='has_disliked')
 def has_disliked(user, obj) -> bool:
-    user_vote = obj.votes.filter(user=user)
+    if user.is_authenticated:
+        user_vote = obj.votes.filter(user=user)
 
-    if user_vote.exists() and user_vote[0].vote == -1:
-        return True
-    else:
-        return False
+        if user_vote.exists() and user_vote[0].vote == -1:
+            return True
+
+    return False
